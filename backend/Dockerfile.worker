@@ -1,0 +1,20 @@
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+WORKDIR /app
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+COPY ["JobPlatform.Core/JobPlatform.Core.csproj", "JobPlatform.Core/"]
+COPY ["JobPlatform.Infrastructure/JobPlatform.Infrastructure.csproj", "JobPlatform.Infrastructure/"]
+COPY ["JobPlatform.Worker/JobPlatform.Worker.csproj", "JobPlatform.Worker/"]
+RUN dotnet restore "JobPlatform.Worker/JobPlatform.Worker.csproj"
+COPY . .
+WORKDIR "/src/JobPlatform.Worker"
+RUN dotnet build -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "JobPlatform.Worker.dll"]

@@ -1,0 +1,58 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: jobplatform
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.api
+    ports:
+      - '8080:8080'
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=jobplatform;Username=postgres;Password=postgres
+      - Jwt__Key=super-secret-key-for-docker-compose-minimum-32-chars!!
+      - Jwt__Issuer=JobPlatform
+      - Jwt__Audience=JobPlatform
+      - ASPNETCORE_URLS=http://+:8080
+    depends_on:
+      db:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.worker
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=jobplatform;Username=postgres;Password=postgres
+    depends_on:
+      db:
+        condition: service_healthy
+    deploy:
+      replicas: 2
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - '3000:3000'
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8080
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
