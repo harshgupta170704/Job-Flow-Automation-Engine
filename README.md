@@ -14,6 +14,9 @@ Built with **Next.js 14 + React + TypeScript** frontend and **.NET 9 + C# + Post
 ### Dashboard
 ![Dashboard with stats, worker status, and recent executions](docs/screenshots/dashboard.png)
 
+### Create Job
+![Create Job configuration page](docs/screenshots/create-job.png)
+
 ### Execution Detail
 ![Execution detail with timing, response, and worker logs](docs/screenshots/execution-detail.png)
 
