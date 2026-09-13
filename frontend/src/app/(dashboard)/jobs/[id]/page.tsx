@@ -31,7 +31,7 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
     try {
       const [jobRes, execRes] = await Promise.all([
         api.get<Job>(`/api/jobs/${params.id}`),
-        api.get<Execution[]>(`/api/executions?jobId=${params.id}&page=${page}&pageSize=10`)
+        api.get<Execution[]>(`/api/jobs/${params.id}/executions`, { page: String(page), pageSize: '10' })
       ]);
       
       if (jobRes.data) setJob(jobRes.data);
@@ -53,7 +53,7 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
     if (!job) return;
     setIsToggling(true);
     try {
-      await api.put(`/api/jobs/${job.id}/toggle`, { isActive: !job.isActive });
+      await api.post(`/api/jobs/${job.id}/toggle`);
       setJob({ ...job, isActive: !job.isActive });
       toast({ title: `Job ${job.isActive ? 'paused' : 'activated'} successfully` });
     } catch (err: any) {

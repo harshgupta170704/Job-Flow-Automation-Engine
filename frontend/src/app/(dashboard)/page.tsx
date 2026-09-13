@@ -21,7 +21,7 @@ export default function DashboardPage() {
       try {
         const [statsRes, execsRes] = await Promise.all([
           api.get<DashboardStats>("/api/dashboard/stats"),
-          api.get<Execution[]>("/api/executions?limit=20")
+          api.get<Execution[]>("/api/dashboard/recent")
         ]);
         
         if (statsRes.data) setStats(statsRes.data);
