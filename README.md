@@ -50,6 +50,12 @@ Built with **Next.js 14 + React + TypeScript** frontend and **.NET 9 + C# + Post
 
 ---
 
+## Live Demo
+- **Frontend App**: [https://job-flow-automation-engine.vercel.app](https://job-flow-automation-engine.vercel.app)
+- **Backend API**: [https://jobflow-backend-kcw7.onrender.com/swagger](https://jobflow-backend-kcw7.onrender.com/swagger)
+
+---
+
 ## ✨ Features
 
 | Feature | Description |
