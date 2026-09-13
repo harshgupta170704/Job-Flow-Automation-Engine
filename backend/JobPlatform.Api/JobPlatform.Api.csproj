@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\JobPlatform.Core\JobPlatform.Core.csproj" />
     <ProjectReference Include="..\JobPlatform.Infrastructure\JobPlatform.Infrastructure.csproj" />
+    <ProjectReference Include="..\JobPlatform.Worker\JobPlatform.Worker.csproj" />
   </ItemGroup>
 
   <ItemGroup>

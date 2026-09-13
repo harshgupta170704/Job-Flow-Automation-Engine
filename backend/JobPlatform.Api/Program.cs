@@ -65,6 +65,19 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped<IExecutionService, ExecutionService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IJobQueue, JobQueue>();
+
+builder.Services.AddScoped<JobPlatform.Worker.Services.Executors.ExecutorFactory>();
+builder.Services.AddTransient<JobPlatform.Worker.Services.Executors.HttpRequestExecutor>();
+builder.Services.AddTransient<JobPlatform.Worker.Services.Executors.WebhookExecutor>();
+
+if (Environment.GetEnvironmentVariable("RUN_WORKER_IN_API") == "true")
+{
+    builder.Services.AddHostedService<JobPlatform.Worker.Services.JobQueueProcessor>();
+    builder.Services.AddHostedService<JobPlatform.Worker.Services.JobScheduler>();
+    builder.Services.AddHostedService<JobPlatform.Worker.Services.HeartbeatService>();
+    builder.Services.AddHostedService<JobPlatform.Worker.Services.StaleJobRecovery>();
+}
 
 var app = builder.Build();
 
