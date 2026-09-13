@@ -6,6 +6,7 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 COPY ["JobPlatform.Core/JobPlatform.Core.csproj", "JobPlatform.Core/"]
 COPY ["JobPlatform.Infrastructure/JobPlatform.Infrastructure.csproj", "JobPlatform.Infrastructure/"]
+COPY ["JobPlatform.Worker/JobPlatform.Worker.csproj", "JobPlatform.Worker/"]
 COPY ["JobPlatform.Api/JobPlatform.Api.csproj", "JobPlatform.Api/"]
 RUN dotnet restore "JobPlatform.Api/JobPlatform.Api.csproj"
 COPY . .
