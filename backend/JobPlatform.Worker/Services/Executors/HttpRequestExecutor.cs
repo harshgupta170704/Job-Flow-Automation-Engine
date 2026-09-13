@@ -18,7 +18,8 @@ public class HttpRequestExecutor : IJobExecutor
 
     public async Task<ExecutionResult> ExecuteAsync(Job job, Execution execution, CancellationToken ct)
     {
-        var config = JsonSerializer.Deserialize<HttpRequestConfig>(job.Configuration);
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        var config = JsonSerializer.Deserialize<HttpRequestConfig>(job.Configuration, options);
         if (config == null || string.IsNullOrEmpty(config.Url))
             return new ExecutionResult(false, null, null, "Invalid configuration", null, false);
 

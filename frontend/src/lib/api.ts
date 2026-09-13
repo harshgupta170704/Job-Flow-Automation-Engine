@@ -36,7 +36,22 @@ class ApiClient {
     }
 
     if (!response.ok) {
-      throw new Error(data?.error || `API Error: ${response.status} ${response.statusText}`);
+      let errorMessage = data?.error;
+      
+      // Handle ASP.NET Core standard validation errors (ProblemDetails)
+      if (!errorMessage && data?.errors && typeof data.errors === 'object') {
+        // Extract the first validation error message
+        const firstField = Object.keys(data.errors)[0];
+        const fieldErrors = data.errors[firstField];
+        if (Array.isArray(fieldErrors) && fieldErrors.length > 0) {
+          errorMessage = fieldErrors[0];
+        }
+      }
+      
+      // Fallback to title if available, otherwise generic
+      errorMessage = errorMessage || data?.title || `API Error: ${response.status} ${response.statusText}`;
+      
+      throw new Error(errorMessage);
     }
 
     return data as ApiResponse<T>;
