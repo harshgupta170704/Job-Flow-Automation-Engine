@@ -36,5 +36,4 @@ services:
 databases:
   - name: jobflow-db
     databaseName: jobplatform
-    user: postgres
     plan: free
